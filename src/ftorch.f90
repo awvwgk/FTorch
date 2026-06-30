@@ -45,7 +45,8 @@ module ftorch
                           torch_model_print_parameters, &  !---- (interrogation)
                           torch_model_is_training, &
                           torch_model_parameters, &
-                          torch_model_forward  !---------------- (procedures)
+                          torch_model_forward, & !-------------- (procedures)
+                          torch_model_save
 
   use ftorch_optim, only: torch_optim, &  !--------------------- (type)
                           torch_optim_SGD, &  !----------------- (constructors)
@@ -54,6 +55,9 @@ module ftorch
                           torch_optim_delete, &  !-------------- (destructor)
                           torch_optim_zero_grad, &  !----------- (procedures)
                           torch_optim_step
+
+  use ftorch_loss, only: torch_loss_mse, &
+                         torch_loss_cross_entropy
 
   implicit none
 

@@ -49,6 +49,9 @@ typedef enum {
   torch_kFloat64
 } torch_data_t;
 
+// Reduction types
+typedef enum { torch_kNone, torch_kMean, torch_kSum } torch_reduction_t;
+
 // Device types
 // NOTE: Defined in main CMakeLists and passed via preprocessor
 typedef enum {
@@ -434,6 +437,14 @@ EXPORT_C torch_jit_script_module_t torch_jit_load(const char *filename,
                                                   const bool is_training);
 
 /**
+ * Function to save in a Torch model in a TorchScript file
+ * @param Torch Module to be written out
+ * @param filename where TorchScript description of model is to be stored
+ */
+EXPORT_C void torch_jit_save(const torch_jit_script_module_t module,
+                             const char *filename);
+
+/**
  * Function to run the `forward` method of a Torch Module
  * @param Torch Module containing the model
  * @param vector of Torch Tensors as inputs to the model
@@ -476,5 +487,31 @@ EXPORT_C void torch_jit_module_parameters(const torch_jit_script_module_t module
  * @param Torch Module to delete
  */
 EXPORT_C void torch_jit_module_delete(torch_jit_script_module_t module);
+
+// =============================================================================
+// --- Torch loss API
+// =============================================================================
+
+/**
+ * Function to create an MSELoss and return a pointer to it
+ * @param Tensor containing loss value(s)
+ * @param Input Torch tensor to evaluate the loss at
+ * @param Target Torch tensor to evaluate the loss against
+ * @param Optional reduction type
+ */
+EXPORT_C void torch_loss_mse(torch_tensor_t loss, const torch_tensor_t input,
+                             const torch_tensor_t target,
+                             const torch_reduction_t reduction_type);
+
+/**
+ * Function to create a CrossEntropyLoss and return a pointer to it
+ * @param Tensor containing loss value(s)
+ * @param Input Torch tensor to evaluate the loss at
+ * @param Target Torch tensor to evaluate the loss against
+ * @param Optional reduction type
+ */
+EXPORT_C void torch_loss_cross_entropy(torch_tensor_t loss, const torch_tensor_t input,
+                                       const torch_tensor_t target,
+                                       const torch_reduction_t reduction_type);
 
 #endif /* C_TORCH_H*/
